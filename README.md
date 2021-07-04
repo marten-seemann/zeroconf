@@ -29,12 +29,6 @@ This package requires **Go 1.7** (context in std lib) or later.
 ## Browse for services in your local network
 
 ```go
-// Discover all services on the network (e.g. _workstation._tcp)
-resolver, err := zeroconf.NewResolver(nil)
-if err != nil {
-    log.Fatalln("Failed to initialize resolver:", err.Error())
-}
-
 entries := make(chan *zeroconf.ServiceEntry)
 go func(results <-chan *zeroconf.ServiceEntry) {
     for entry := range results {
@@ -45,6 +39,7 @@ go func(results <-chan *zeroconf.ServiceEntry) {
 
 ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
 defer cancel()
+// Discover all services on the network (e.g. _workstation._tcp)
 err = resolver.Browse(ctx, "_workstation._tcp", "local.", entries)
 if err != nil {
     log.Fatalln("Failed to browse:", err.Error())
@@ -94,7 +89,7 @@ See what needs to be done and submit a pull request :)
 * [x] Browse / Lookup / Register services
 * [x] Multiple IPv6 / IPv4 addresses support
 * [x] Send multiple probes (exp. back-off) if no service answers (*)
-* [ ] Timestamp entries for TTL checks
+* [x] Timestamp entries for TTL checks
 * [ ] Compare new multicasts with already received services
 
 _Notes:_
